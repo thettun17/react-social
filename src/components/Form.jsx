@@ -8,7 +8,6 @@ export default function Form({add}) {
                 e => {
                     e.preventDefault()
                     const content = contentRef.current.value;
-                    console.log(content)
                     add(content, "Thet Tun")
                     e.currentTarget.reset()
                 }
