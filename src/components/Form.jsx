@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import { Box, TextField, Button } from "@mui/material";
+
 export default function Form({add}) {
     const contentRef = useRef();
     return (
@@ -8,7 +9,7 @@ export default function Form({add}) {
                 e => {
                     e.preventDefault()
                     const content = contentRef.current.value;
-                    add(content, "Thet Tun")
+                    add.mutate(content)
                     e.currentTarget.reset()
                 }
             }
