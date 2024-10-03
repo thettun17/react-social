@@ -46,10 +46,12 @@ export default function Item({item, remove, primary, comment}) {
                     </Box>
                     <IconButton
                         size="small"
-                        onClick={(e) => {
-                            remove(item.id)
-                            e.stopPropagation()
-                        }}>
+                        onClick={
+                            e => {
+                                remove.mutate(item.id)
+                                e.stopPropagation()
+                            }
+                        }>
                         <DeleteIcon fontSize="inherit" />
                     </IconButton>
                 </Box>

@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import { queryClient } from "../ThemeApp";
 import { useApp } from "../ThemeApp";
+import { postComment } from "../libs/fetcher"
+import { useRef } from "react";
 
 const api = import.meta.env.VITE_API;
 
@@ -11,6 +13,7 @@ export default function Comments() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { setGlobalMsg } = useApp();
+    const contentRef = useRef();
 
     const { isLoading, isError, error, data } = useQuery(
         "comments", 
@@ -50,6 +53,17 @@ export default function Comments() {
         }
     )
 
+    const addComment = useMutation( content => postComment(content, id), {
+        onSuccess: async comment => {
+            await queryClient.cancelQueries('comments');
+            await queryClient.setQueryData('comments', old => {
+                old.comments = [...old.comments, comment];
+                return old;
+            })
+            setGlobalMsg("A comment Added");
+        }
+    })
+
 
     if (isError) {
         return (
@@ -82,9 +96,19 @@ export default function Comments() {
                 })
             }
             
-            <form>
+            <form
+                onSubmit={
+                    e => {
+                        e.preventDefault();
+                        const content = contentRef.current.value
+                        if(!content) return false;
+                        addComment.mutate(content)
+                        e.currentTarget.reset()
+                    }
+                }
+            >
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 3, }}>
-                    <TextField multiline placeholder="Your Comment" />
+                    <TextField multiline placeholder="Your Comment" inputRef={contentRef}/>
                     <Button type="submit" variant="contained">Reply</Button>
                 </Box>
             </form>

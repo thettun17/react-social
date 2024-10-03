@@ -107,7 +107,8 @@ export async function deletePost(id) {
     })
 
     if(res.ok) {
-        return res.json()
+        return res
     }
+
     throw new Error("Error: Check Network Log")
 }

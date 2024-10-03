@@ -58,7 +58,7 @@ export default function Home() {
         {
             onSuccess: async post => {
                 await queryClient.cancelQueries("posts");
-                await queryClient.setQuerieyData("posts", old => [post, ...old])
+                await queryClient.setQueryData("posts", old => [post, ...old])
             }
         }
     )
@@ -81,7 +81,7 @@ export default function Home() {
             {
                 data.map(item => {
                     return (
-                        <Item key={item.id} item={item} remove={remove.mutate} />
+                        <Item key={item.id} item={item} remove={remove} />
                     )
                 })
             }
